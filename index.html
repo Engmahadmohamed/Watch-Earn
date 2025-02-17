@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styl.css">
+  <title>Telegram Mini App</title>
+</head>
+<body>
+  <div class="container">
+    <!-- Main Content -->
+    <div class="main-content">
+      <h1>Telegram Mini App</h1>
+
+      <!-- Balance Section -->
+      <div class="balance-section">
+        <h2>Your Balance</h2>
+        <p>$<span id="balance">0.00</span></p>
+      </div>
+
+      <!-- Buttons -->
+      <div class="buttons">
+        <button id="watchAdsBtn">Watch Ads (+$0.05)</button>
+        <button id="withdrawBtn">Withdraw $2</button>
+      </div>
+
+      <!-- Message -->
+      <p id="message"></p>
+
+      <!-- Withdrawal History -->
+      <div class="withdrawals-section">
+        <h2>Withdrawal History</h2>
+        <ul id="withdrawalsList"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pop-up Banner (Modal) -->
+  <div class="modal" id="ecvModal">
+    <div class="modal-content">
+      <h3>Enter Your ECV Number</h3>
+      <input type="text" id="ecvInput" placeholder="ECV Number" />
+      <button id="submitECV">Submit</button>
+    </div>
+  </div>
+
+  <!-- Success Banner -->
+  <div class="success-banner" id="successBanner">
+    Withdrawal successful! $2.00 has been withdrawn.
+  </div>
+
+  <!-- Script -->
+  <script src="app.js"></script>
+</body>
+</html>
