@@ -176,3 +176,21 @@ body {
   font-size: 14px;
   color: #333;
 }
+/* Help Button */
+#helpBtn {
+  background-color: #27ae60; /* Green color for the Help button */
+  color: #fff;
+  border: none;
+  padding: 15px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none; /* Remove underline from link */
+  display: block; /* Make it a block element */
+  transition: background-color 0.3s;
+}
+
+#helpBtn:hover {
+  background-color: #219653; /* Darker green on hover */
+}
