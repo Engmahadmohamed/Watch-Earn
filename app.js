@@ -11,110 +11,120 @@ const ecvModal = document.getElementById('ecvModal');
 const ecvInput = document.getElementById('ecvInput');
 const submitECV = document.getElementById('submitECV');
 const successBanner = document.getElementById('successBanner');
-const withdrawalsList = document.getElementById('withdrawalsList'); // New element for withdrawal list
+const withdrawalsList = document.getElementById('withdrawalsList');
 
-// Update balance display and save to local storage
+// Update balance display
 function updateBalance() {
   balanceElement.textContent = balance.toFixed(3);
-  localStorage.setItem('balance', balance); // Save balance to local storage
+  localStorage.setItem('balance', balance.toFixed(3));
 }
 
-// Update withdrawals list display and save to local storage
+// Update withdrawals list
 function updateWithdrawalsList() {
-  withdrawalsList.innerHTML = ''; // Clear the list
+  withdrawalsList.innerHTML = '';
   withdrawals.forEach((withdrawal, index) => {
     const listItem = document.createElement('li');
     listItem.textContent = `Withdrawal #${index + 1}: $${withdrawal.amount} (ECV: ${withdrawal.ecv})`;
     withdrawalsList.appendChild(listItem);
   });
-  localStorage.setItem('withdrawals', JSON.stringify(withdrawals)); // Save withdrawals to local storage
+  localStorage.setItem('withdrawals', JSON.stringify(withdrawals));
 }
 
-// Watch Ads Button Click
+// Watch Ads Button
 watchAdsBtn.addEventListener('click', () => {
-  balance += 0.05; // Add $0.05 per click
-  updateBalance();
-  messageElement.textContent = 'You earned $0.05 by watching an ad!';
+  watchAdsBtn.disabled = true;
+  messageElement.textContent = 'Loading ad...';
+  
+  show_8957361().then(() => {
+    balance += 0.05;
+    updateBalance();
+    messageElement.textContent = 'You earned $0.05 by watching an ad!';
+  }).catch(() => {
+    messageElement.textContent = 'Ad canceled - no reward given';
+  }).finally(() => {
+    watchAdsBtn.disabled = false;
+  });
 });
 
-// Withdraw Button Click
+// Withdraw Button
 withdrawBtn.addEventListener('click', () => {
   if (balance >= 2.00) {
-    ecvModal.style.display = 'flex'; // Show the ECV modal
+    withdrawBtn.disabled = true;
+    messageElement.textContent = 'Loading withdrawal ad...';
+    
+    show_8957361('pop').then(() => {
+      ecvModal.style.display = 'flex';
+      messageElement.textContent = '';
+    }).catch(() => {
+      messageElement.textContent = 'Withdrawal canceled - ad not completed';
+    }).finally(() => {
+      withdrawBtn.disabled = false;
+    });
   } else {
     messageElement.textContent = 'You need at least $2.00 to withdraw.';
   }
 });
 
-// Submit ECV Number
+// Submit ECV
 submitECV.addEventListener('click', () => {
   const ecvNumber = ecvInput.value.trim();
-  if (ecvNumber) {
-    balance -= 2.00; // Deduct $2.00
-    const withdrawal = { amount: 2.00, ecv: ecvNumber, timestamp: new Date().toLocaleString() }; // Create withdrawal object
-    withdrawals.push(withdrawal); // Add to withdrawals list
-    updateBalance();
-    updateWithdrawalsList(); // Update the withdrawals list
-    ecvModal.style.display = 'none'; // Hide the ECV modal
-    successBanner.style.display = 'block'; // Show the success banner
-    setTimeout(() => {
-      successBanner.style.display = 'none'; // Hide the success banner after 3 seconds
-    }, 3000);
-    sendData({ action: 'withdraw', amount: 2.00, ecv: ecvNumber }); // Send data to Telegram
-  } else {
-    alert('Please enter a valid ECV number.');
+  if (!ecvNumber) return alert('Please enter ECV number');
+
+  balance -= 2.00;
+  withdrawals.push({ 
+    amount: 2.00, 
+    ecv: ecvNumber, 
+    timestamp: new Date().toLocaleString()
+  });
+  
+  updateBalance();
+  updateWithdrawalsList();
+  ecvModal.style.display = 'none';
+  ecvInput.value = '';
+  
+  successBanner.style.display = 'block';
+  setTimeout(() => {
+    successBanner.style.display = 'none';
+  }, 3000);
+
+  // Telegram integration
+  if (window.Telegram?.WebApp) {
+    try {
+      window.Telegram.WebApp.sendData(JSON.stringify({
+        action: 'withdraw',
+        amount: 2.00,
+        ecv: ecvNumber
+      }));
+    } catch (error) {
+      console.error('Telegram integration error:', error);
+    }
   }
 });
 
-// Initialize
-updateBalance();
-updateWithdrawalsList(); // Initialize withdrawals list
-
-// Telegram Web App Integration (Optional)
-const tg = window.Telegram.WebApp;
-tg.expand(); // Expand the app to full screen
-
-// Send data to Telegram (e.g., for withdrawal)
-function sendData(data) {
-  tg.sendData(JSON.stringify(data));
-}
-
-
-// ads
-
-    // Rewarded Popup
-
-    show_8957361('pop').then(() => {
-      // user watch ad till the end or close it in interstitial format
-      // your code to reward user for rewarded format
-  }).catch(e => {
-      // user get error during playing ad
-      // do nothing or whatever you want
-  })
-          
-
+// Initialize auto-ads
+document.addEventListener('DOMContentLoaded', () => {
+  updateBalance();
+  updateWithdrawalsList();
   
-    // Rewarded interstitial
-        
-show_8957361().then(() => {
-  // You need to add your user reward function here,
-    //  which will be executed after the user watches the ad.
-  // For more details, please refer to the detailed instructions.
-  alert('You have seen an ad!');
-})
-      
+  // Auto-show interstitial ads configuration
+  show_8957361({ 
+    type: 'inApp', 
+    inAppSettings: { 
+      frequency: 2,
+      capping: 0.1,
+      interval: 30,
+      timeout: 5,
+      everyPage: false
+    }
+  });
 
-    // In-App Interstitial 
-
-    show_8957361({ 
-      type: 'inApp', 
-      inAppSettings: { 
-        frequency: 2, 
-        capping: 0.1, 
-        interval: 30, 
-        timeout: 5, 
-        everyPage: false 
-      } 
-    })
-    
-    // This value is decoded as follows: -show automatically 2 ads within 0.1 hours (6 minutes) with a 30-second interval between them and a 5-second delay before the first one is shown. The last digit, 0, means that the session will be saved when you navigate between pages. If you set the last digit as 1, then at any transition between pages, the session will be reset, and the ads will start again.
+  // Telegram WebApp setup
+  if (window.Telegram?.WebApp) {
+    try {
+      window.Telegram.WebApp.expand();
+      window.Telegram.WebApp.ready();
+    } catch (error) {
+      console.error('Telegram WebApp error:', error);
+    }
+  }
+});
