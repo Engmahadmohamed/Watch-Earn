@@ -38,7 +38,7 @@ watchAdsBtn.addEventListener('click', () => {
   show_8957361().then(() => {
     balance += 0.01;
     updateBalance();
-    messageElement.textContent = 'You earned $0.05 by watching an ad!';
+    messageElement.textContent = 'You earned $0.01 by watching an ad!';
   }).catch(() => {
     messageElement.textContent = 'Ad canceled - no reward given';
   }).finally(() => {
