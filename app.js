@@ -52,7 +52,7 @@ withdrawBtn.addEventListener('click', () => {
     withdrawBtn.disabled = true;
     messageElement.textContent = 'Loading withdrawal ad...';
     
-    show_8957361('pop').then(() => {
+    show_8957363('pop').then(() => {
       ecvModal.style.display = 'flex';
       messageElement.textContent = '';
     }).catch(() => {
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateWithdrawalsList();
   
   // Auto-show interstitial ads configuration
-  show_8957361({ 
+  show_8957364({ 
     type: 'inApp', 
     inAppSettings: { 
       frequency: 2,
