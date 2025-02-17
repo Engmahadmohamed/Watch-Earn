@@ -72,6 +72,11 @@ body {
   transition: background-color 0.3s;
 }
 
+a{
+  color: white;
+  text-decoration: none;
+}
+
 .buttons button:hover {
   background-color: #2980b9;
 }
