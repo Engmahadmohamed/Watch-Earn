@@ -36,9 +36,9 @@ watchAdsBtn.addEventListener('click', () => {
   messageElement.textContent = 'Loading ad...';
   
   show_8957361().then(() => {
-    balance += 0.01;
+    balance += 0.003;
     updateBalance();
-    messageElement.textContent = 'You earned $0.01 by watching an ad!';
+    messageElement.textContent = 'You earned $0.003 by watching an ad!';
   }).catch(() => {
     messageElement.textContent = 'Ad canceled - no reward given';
   }).finally(() => {
@@ -70,9 +70,9 @@ submitECV.addEventListener('click', () => {
   const ecvNumber = ecvInput.value.trim();
   if (!ecvNumber) return alert('Please enter ECV number');
 
-  balance -= 2.00;
+  balance -= 5.00;
   withdrawals.push({ 
-    amount: 2.00, 
+    amount: 5.00, 
     ecv: ecvNumber, 
     timestamp: new Date().toLocaleString()
   });
@@ -92,7 +92,7 @@ submitECV.addEventListener('click', () => {
     try {
       window.Telegram.WebApp.sendData(JSON.stringify({
         action: 'withdraw',
-        amount: 2.00,
+        amount: 5.00,
         ecv: ecvNumber
       }));
     } catch (error) {
