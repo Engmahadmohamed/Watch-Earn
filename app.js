@@ -48,7 +48,7 @@ watchAdsBtn.addEventListener('click', () => {
 
 // Withdraw Button
 withdrawBtn.addEventListener('click', () => {
-  if (balance >= 2.00) {
+  if (balance >= 5.00) {
     withdrawBtn.disabled = true;
     messageElement.textContent = 'Loading withdrawal ad...';
     
@@ -61,7 +61,7 @@ withdrawBtn.addEventListener('click', () => {
       withdrawBtn.disabled = false;
     });
   } else {
-    messageElement.textContent = 'You need at least $2.00 to withdraw.';
+    messageElement.textContent = 'You need at least $5.00 to withdraw.';
   }
 });
 
