@@ -7,7 +7,15 @@
   <link rel="stylesheet" href="styl.css">
   <title>Telegram Mini App</title>
   <script src='//whephiwums.com/vignette.min.js' data-zone='8957361' data-sdk='show_8957361'></script>
-  
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "12d9986a-b746-4438-a3bf-e7da895ed126",
+    });
+  });
+</script>
 </head>
 <body>
   <div class="container">
